@@ -27,7 +27,7 @@ class Equity(object):
     
     """
     def __init__(self):
-        self.EODHISTTOKEN = '5ce1a6c1629f72.63034330'
+        self.EODHISTTOKEN = '5cea6c1629f72.63034330'
         self.URL_eod = "https://eodhistoricaldata.com/api/eod/"
         self.URL_fund = "https://eodhistoricaldata.com/api/fundamentals/"
         self.URL_div = "https://eodhistoricaldata.com/api/div/"
