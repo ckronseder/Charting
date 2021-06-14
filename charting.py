@@ -13,6 +13,7 @@ import altair as at
 from datetime import datetime
 import base64
 import io
+import openpyxl
 
 @st.cache
 #This is to make sure that API is onyl called when necessary
