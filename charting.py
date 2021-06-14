@@ -11,8 +11,6 @@ import DataHandler as dh
 import configure
 import altair as at
 from datetime import datetime
-import base64
-import io
 
 @st.cache
 #This is to make sure that API is onyl called when necessary
@@ -119,7 +117,7 @@ if len(ticker_list) > 0:
     chart = at.Chart(price_frame).mark_line().encode(at.X('date:T'),at.Y('price:Q'),color='symbol')
     st.write(chart.configure_view(continuousHeight=400,continuousWidth=750))
     
-    if st.button('Create Excel'):
+    if st.button('Download Excel'):
         excel_df = pd.DataFrame(index=prices[ticker_list[0]].index)
         for ticker in ticker_list:
             if NORM == 'Normalise':
@@ -127,13 +125,9 @@ if len(ticker_list) > 0:
             else:
                 excel_df[ticker] = list(prices[ticker]['Adjusted_close'])
         time_stamp = datetime.now().strftime("%m%d%Y %H%M%S")
-        towrite = io.BytesIO()
-        downloaded_file = excel_df.to_excel(towrite, encoding='utf-8', index=False, header=True)
-        towrite.seek(0)
-        b64 = base64.b64encode(towrite.read()).decode()
         file_name = ('securities'+time_stamp+'.xlsx')
-        linko = f'<a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{b64}" download="'+file_name+'.xlsx">Download excel file</a>'
-        st.markdown(linko, unsafe_allow_html=True)
+        excel_df.to_excel(file_name)
+        st.write('Excel Saved')
 
     short_info = get_info(ticker_list)
     long_info = get_fundamental(ticker_list)
