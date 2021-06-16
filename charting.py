@@ -113,7 +113,6 @@ if len(ticker_list) > 0:
         else:
             temp_df['price'] = list(prices[ticker]['Adjusted_close'])
         price_frame = price_frame.append(temp_df)
-    
 
     #show multiple securities in one chart
     chart = at.Chart(price_frame).mark_line().encode(at.X('date:T'),at.Y('price:Q'),color='symbol')
@@ -122,16 +121,18 @@ if len(ticker_list) > 0:
     if st.button('Create Excel'):
         excel_df = pd.DataFrame(index=prices[ticker_list[0]].index)
         for ticker in ticker_list:
+            temp_df = pd.DataFrame(index=prices[ticker].index)
             if NORM == 'Normalise':
-                excel_df[ticker] = list(prices[ticker]['Adjusted_close']* 100/prices[ticker]['Adjusted_close'].iloc[0])
+                temp_df[ticker] = list(prices[ticker]['Adjusted_close']* 100/prices[ticker]['Adjusted_close'].iloc[0])
             else:
-                excel_df[ticker] = list(prices[ticker]['Adjusted_close'])
+                temp_df[ticker] = list(prices[ticker]['Adjusted_close'])
+            excel_df = pd.merge(excel_df, temp_df, left_index=True, right_index=True)
         time_stamp = datetime.now().strftime("%m%d%Y %H%M%S")
         towrite = io.BytesIO()
         downloaded_file = excel_df.to_excel(towrite, encoding='utf-8', index=False, header=True)
         towrite.seek(0)
         b64 = base64.b64encode(towrite.read()).decode()
-        file_name = ('securities'+time_stamp+'.xlsx')
+        file_name = ('securities'+time_stamp)
         linko = f'<a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{b64}" download="'+file_name+'.xlsx">Download excel file</a>'
         st.markdown(linko, unsafe_allow_html=True)
 
