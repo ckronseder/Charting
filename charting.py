@@ -129,6 +129,8 @@ if len(ticker_list) > 0:
             else:
                 temp_df[ticker] = list(prices[ticker]['Adjusted_close'])
             excel_df = pd.merge(excel_df, temp_df, left_index=True, right_index=True)
+        excel_df.reset_index(inplace=True)
+        excel_df = excel_df.rename(columns = {'index':'date'})
         time_stamp = datetime.now().strftime("%m%d%Y %H%M%S")
         towrite = io.BytesIO()
         downloaded_file = excel_df.to_excel(towrite, encoding='utf-8', index=False, header=True)
