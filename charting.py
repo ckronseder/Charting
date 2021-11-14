@@ -80,7 +80,7 @@ if stock_list[0] != "":
     for stock in stock_list:
         root = result[stock]
         for item in root:
-            if item['ISIN']:
+            if item['ISIN'] or  item['Exchange'] == 'CC':
                 selection_list.append(item['Name']+': '+item['Code']+'.'+item['Exchange'] )
 
 #==================

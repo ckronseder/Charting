@@ -189,7 +189,7 @@ class Rates(object):
             hist_price = 0
         
         return hist_price
-
+    
 
 #====================================
 if __name__ == '__main__':
